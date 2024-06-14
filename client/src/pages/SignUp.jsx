@@ -13,8 +13,7 @@ const navigate=useNavigate();
 const[values,setValues]=useState({
   username:"",
   email:"",
-  password:"",
-  confirmPassword:"",
+  password:""
 
 })
 useEffect(()=>
@@ -49,7 +48,7 @@ const handleSubmit = async (e) => {
 
 const handleValidation=()=>
 {
-const {password,confirmPassword,username,email}=values;
+const {password,username,email}=values;
 if(!username)
 {
  toast.error("Enter username");
@@ -68,17 +67,14 @@ toast.error(" Enter  password");
 return false;
 }
 
-if(password!=confirmPassword)
-{
- toast.error("Incorrect password")
-return false;
-}
+
 if(username)
 {
 if(username.length<3)
 {
    toast.error("Username must be at least 3 characters");
    return false;
+}
 }
 if(password.length<6)
 {
@@ -88,12 +84,13 @@ if(password.length<6)
 return true;
 }
 
-}
+
 
   const handleChange=(event)=>
     {
     setValues({...values,[event.target.name]:event.target.value})
     }
+  
 
   
 
@@ -122,11 +119,7 @@ return true;
          name="password"
          onChange={(e)=>handleChange(e)}
         />
-         <input type="password" 
-         placeholder="Confirm Password"
-         name="confirmPassword"
-         onChange={(e)=>handleChange(e)}
-        />
+         
         <button type="submit">Submit</button>
         <span>Already a User? <Link to="/signin">Login</Link></span>
         </form>
