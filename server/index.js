@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const userRoutes = require("./routes/userRoutes.js");
+
 const connectToMongo = require("./Database/db.js");
 const errorHandler = require("./middleware/errorHandler.js");
 
@@ -11,7 +11,7 @@ connectToMongo(process.env.URL);
 app.use(cors());
 app.use(express.json());
 
-app.use("/auth", userRoutes);
+app.use("/auth", require("./routes/userRoutes.js"));
 app.use(errorHandler);
 
 app.listen(process.env.PORT, () => {

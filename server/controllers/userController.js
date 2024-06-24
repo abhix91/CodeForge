@@ -8,9 +8,8 @@ const register = async (req, res) => {
   const { name, email, password } = req.body;
 
   const emailCheck = await User.findOne({ email });
- // console.log(emailCheck);
+  console.log(emailCheck);
   if (emailCheck) {
-    
     throw new AppError({
       name: "BAD_REQUEST",
       message: "Email Already Exist",
@@ -33,9 +32,10 @@ const register = async (req, res) => {
 };
 
 const Login = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
+  console.log("--->", req.body);
 
-  const isUserValid = await User.findOne({ username });
+  const isUserValid = await User.findOne({ email });
   if (!isUserValid) {
     throw new AppError({
       name: "NOT_FOUND",
