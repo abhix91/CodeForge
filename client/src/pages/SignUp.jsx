@@ -11,7 +11,7 @@ import { registerRoute } from '../utils/APIRoutes';
 const SignUp = () => {
 const navigate=useNavigate();
 const[values,setValues]=useState({
-  username:"",
+  name:"",
   email:"",
   password:""
 
@@ -28,9 +28,9 @@ useEffect(()=>
 const handleSubmit = async (e) => {
     e.preventDefault();
     if (handleValidation()) {
-      const { email, username, password } = values;
+      const { email, name, password } = values;
       const { data } = await axios.post(registerRoute, {
-        username,
+        name,
         email,
         password,
       });
@@ -48,8 +48,8 @@ const handleSubmit = async (e) => {
 
 const handleValidation=()=>
 {
-const {password,username,email}=values;
-if(!username)
+const {password,name,email}=values;
+if(!name)
 {
  toast.error("Enter username");
  return false;
@@ -68,9 +68,9 @@ return false;
 }
 
 
-if(username)
+if(name)
 {
-if(username.length<3)
+if(name.length<3)
 {
    toast.error("Username must be at least 3 characters");
    return false;
