@@ -1,8 +1,8 @@
-const { SignUp, SignIn } = require("../controllers/userController");
+const userRoute = require("../controllers/userController");
+const { asyncHandler } = require("../utils/handler");
 
-const router=require("express").Router();
+const router = require("express").Router();
 
-router.post("/signup",SignUp);
-router.post("/signin",SignIn);
-
+router.route("/register").post(asyncHandler(userRoute.register));
+router.route("/login").post(asyncHandler(userRoute.Login));
 module.exports = router;

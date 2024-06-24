@@ -11,7 +11,7 @@ connectToMongo(process.env.URL);
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/auth", userRoutes);
+app.use("/auth", userRoutes);
 app.use(errorHandler);
 
 app.listen(process.env.PORT, () => {

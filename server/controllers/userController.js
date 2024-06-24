@@ -3,70 +3,67 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const AppError = require("../utils/error");
 const SECRET = process.env.SECRET;
-const HttpStatus = require("../utils/statusCodes");
 
+const register = async (req, res) => {
+  const { username, email, password } = req.body;
 
-const SignUp = async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-
-    const usernameCheck = await User.findOne({ username });
-    if (usernameCheck) {
-      throw new AppError({
-        name: "BAD_REQUEST",
-        message: "User Already Registered",
-      });
-    }
-
-    const emailCheck = await User.findOne({ email });
-    if (emailCheck) {
-      return res.status(HttpStatus.CONFLICT).json({ msg: "Email already used", status: false });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({
-      email,
-      username,
-      password: hashedPassword,
+  const usernameCheck = await User.findOne({ username });
+  if (usernameCheck) {
+    throw new AppError({
+      name: "BAD_REQUEST",
+      message: "User Already Registered",
     });
-
-    const token = jwt.sign({ id: user.id }, SECRET, { expiresIn: '1h' });
-
-    return res.status(HttpStatus.OK).json({ status: true, user, token });
-  } catch (err) {
-    if (err instanceof AppError) {
-      return res.status(err.statusCodes).json({ msg: err.message, status: false });
-    }
-    console.error(err);
-    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ msg: "Internal Server Error", status: false });
   }
+  const emailCheck = await User.findOne({ email });
+  if (emailCheck) {
+    throw new AppError({
+      name: "BAD_REQUEST",
+      message: "Email Already Exist",
+    });
+  }
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = await User.create({
+    email,
+    username,
+    password: hashedPassword,
+  });
+  const token = jwt.sign({ id: user.id }, SECRET);
+  return res.status(200).json({
+    message: "Registered Successfully",
+    status: true,
+    user,
+    token: token,
+  });
 };
 
+const Login = async (req, res) => {
+  const { username, password } = req.body;
 
-const SignIn = async (req, res) => {
-  try {
-    const { username, password } = req.body;
-
-    const isUserValid = await User.findOne({ username });
-    if (!isUserValid) {
-      return res.json({ msg: "Invalid username or password", status: false });
-    }
-
-    const isPasswordvalid = await bcrypt.compare(
-      password,
-      isUserValid.password
-    );
-    if (!isPasswordvalid) {
-      return res.json({ msg: "Invalid username or Password", status: false });
-    }
-    const token = jwt.sign({ id: isUserValid.id }, SECRET);
-    return res.json({ status: true, isUserValid, token: token });
-  } catch (err) {
-    console.log(err.message);
+  const isUserValid = await User.findOne({ username });
+  if (!isUserValid) {
+    throw new AppError({
+      name: "NOT_FOUND",
+      message: "User Does Not Exist Kindly Register",
+    });
   }
+
+  const isPasswordvalid = await bcrypt.compare(password, isUserValid.password);
+  if (!isPasswordvalid) {
+    throw new AppError({
+      name: "UNAUTHORIZED",
+      message: "Invalid Credentials",
+    });
+  }
+  const token = jwt.sign({ id: isUserValid.id }, SECRET);
+  return res.json({
+    message: "Login Successfull",
+    status: true,
+    isUserValid,
+    token: token,
+  });
 };
 
 module.exports = {
-  SignUp,
-  SignIn,
+  register,
+  Login,
 };
