@@ -8,7 +8,7 @@ const register = async (req, res) => {
   const { name, email, password } = req.body;
 
   const emailCheck = await User.findOne({ email });
-  console.log(emailCheck);
+
   if (emailCheck) {
     throw new AppError({
       name: "BAD_REQUEST",
@@ -33,7 +33,6 @@ const register = async (req, res) => {
 
 const Login = async (req, res) => {
   const { email, password } = req.body;
-  console.log("--->", req.body);
 
   const isUserValid = await User.findOne({ email });
   if (!isUserValid) {
