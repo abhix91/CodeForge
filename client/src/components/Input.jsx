@@ -1,19 +1,21 @@
-import React from 'react';
-import { Box, Text } from "@chakra-ui/react";
+// Input.jsx
+import { Box, useTheme } from "@chakra-ui/react";
 
 const Input = () => {
+  const theme = useTheme();
+
   return (
-    <Box w="100%" p={4} border="1px solid" borderRadius={4}>
-      <Text mb={2} fontSize="lg">
-        Input
-      </Text>
-      <Box height="50%" p={2} border="1px solid" borderRadius={4}>
-        {/* Add your input content here */}
-        <Text color="green">// Your custom input</Text>
-      </Box>
+    <Box
+      w="100%"
+      h="100%"
+      bg={theme.colors.gray[900]} // Adjust to match your Monaco Editor vs-dark background color
+      color={theme.colors.gray[200]} // Adjust to match your Monaco Editor vs-dark text color
+      p={4}
+    >
+      {/* Your input content here */}
+      Type your input
     </Box>
   );
 };
 
 export default Input;
-

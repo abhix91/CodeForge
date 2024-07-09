@@ -1,33 +1,38 @@
-import React from 'react';
-
-import { Box, Button, Text, useToast } from "@chakra-ui/react";
+import { Box, useTheme, Button } from "@chakra-ui/react";
 
 const Output = () => {
+  const theme = useTheme();
+
+  const handleRunCode = () => {
+    // Implement your run code logic here
+    console.log("Running code...");
+  };
+
   return (
-    <Box w="50%">
-      <Text mb={2} fontSize="lg">
-        Output
-      </Text>
+    <Box
+      w="100%"
+      h="120%"
+      bg={theme.colors.gray[900]} // Adjust to match your Monaco Editor vs-dark background color
+      color={theme.colors.gray[200]} // Adjust to match your Monaco Editor vs-dark text color
+      p={4}
+      position="relative"
+    >
+      'Click "Run Code" to see the output here'
+
+      {/* Button for running code */}
       <Button
         variant="outline"
         colorScheme="green"
-        mb={4}
+        size="sm"
+        position="absolute"
+        top={-8}  // Adjust the negative value to position it outside upwards
+        left={0}
+        onClick={handleRunCode}
       >
         Run Code
       </Button>
-      <Box
-        height="75vh"
-        p={2}
-        
-        border="1px solid"
-        borderRadius={4}
-    
-      >
-       
-          'Click "Run Code" to see the output here'
-      </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default Output
+export default Output;
