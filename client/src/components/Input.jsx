@@ -1,19 +1,24 @@
-// Input.jsx
-import { Box, useTheme } from "@chakra-ui/react";
+import { Box, Textarea, useTheme } from "@chakra-ui/react";
 
-const Input = () => {
+const Input = ({ input, setInput }) => {
   const theme = useTheme();
 
   return (
     <Box
       w="100%"
       h="100%"
-      bg={theme.colors.gray[900]} // Adjust to match your Monaco Editor vs-dark background color
-      color={theme.colors.gray[200]} // Adjust to match your Monaco Editor vs-dark text color
+      bg={theme.colors.gray[900]}
+      color={theme.colors.gray[200]}
       p={4}
     >
-      {/* Your input content here */}
-      Type your input
+      <Textarea
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Type your input here"
+        size="md"
+        bg={theme.colors.gray[800]}
+        color={theme.colors.gray[200]}
+      />
     </Box>
   );
 };

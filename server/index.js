@@ -1,47 +1,43 @@
 const express = require("express");
 const cors = require("cors");
 
-const connectToMongo = require("./Database/db.js");
-const errorHandler = require("./middleware/errorHandler.js");
-const { compileCpp, compileJava, compileC, compilePy } = require('./compile');
 
 require("dotenv").config();
 const app = express();
-connectToMongo(process.env.URL);
+
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/auth", require("./routes/userRoutes.js"));
-app.use(errorHandler);
 
 
 app.post('/compile', (req, res) => {
   const { code, input, language } = req.body;
 
-  switch (language) {
+  let result;
+  try {
+    switch (language) {
       case 'cpp':
-          const cppResult = compileCpp(code, input);
-          res.json(cppResult);
-          break;
+        result = compileCpp(code, input);
+        break;
       case 'java':
-          const javaResult = compileJava(code, input);
-          res.json(javaResult);
-          break;
+        result = compileJava(code, input);
+        break;
       case 'c':
-          const cResult = compileC(code, input);
-          res.json(cResult);
-          break;
+        result = compileC(code, input);
+        break;
       case 'python':
-          const pythonResult = compilePy(code, input);
-          res.json(pythonResult);
-          break;
+        result = compilePy(code, input);
+        break;
       default:
-          res.status(400).json({ error: 'Unsupported language' });
+        return res.status(400).json({ error: 'Unsupported language' });
+    }
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
-
 app.listen(process.env.PORT, () => {
-  console.log(`server is running on port ${process.env.PORT}`);
+  console.log(`Server is running on port ${process.env.PORT}`);
 });

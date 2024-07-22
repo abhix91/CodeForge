@@ -19,7 +19,9 @@ const LanguageSelector = ({ language, onSelect }) => {
         Language:
       </Text>
       <Menu isLazy>
-        <MenuButton as={Button}>{language}</MenuButton>
+        <MenuButton as={Button}>
+          {language} ({LANGUAGE_VERSIONS[language]})
+        </MenuButton>
         <MenuList bg="#110c1b">
           {languages.map(([lang, version]) => (
             <MenuItem
@@ -44,4 +46,5 @@ const LanguageSelector = ({ language, onSelect }) => {
     </Box>
   );
 };
+
 export default LanguageSelector;
