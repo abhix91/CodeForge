@@ -25,7 +25,7 @@ const CodeEditor = () => {
 
   const handleRunCode = async () => {
     try {
-      const response = await axios.post("https://codeforge-latest.onrender.com/compile", {
+      const response = await axios.post("http://localhost:8000/compile", {
         code: value,
         input,
         language,
