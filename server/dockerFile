@@ -1,20 +1,24 @@
-# Use an official Node.js runtime as a parent image
-FROM node:20
+FROM ubuntu:20.04
 
-# Set the working directory inside the container
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y \
+       gcc g++ default-jdk python3 \
+       && apt-get install -y curl \
+    && curl -sL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Copy package.json and package-lock.json from the server folder
-COPY server/package*.json ./ 
+COPY package*.json ./
 
-# Install dependencies
 RUN npm install
 
-# Copy the rest of your application code to the container
-COPY server/ .  
+COPY . .
 
-# Expose the port your app will run on
-EXPOSE 8000
+EXPOSE 3000
 
-# Run the application
-CMD ["node", "index.js"]
+CMD [ "node", "index.js" ]
