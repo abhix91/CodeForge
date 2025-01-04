@@ -1,36 +1,33 @@
 const express = require("express");
 const cors = require("cors");
-
+const { compileCpp, compileJava, compileC, compilePy } = require("./compile");
 
 require("dotenv").config();
 const app = express();
 
-
 app.use(cors());
 app.use(express.json());
 
-
-
-app.post('/compile', (req, res) => {
+app.post("/compile", (req, res) => {
   const { code, input, language } = req.body;
 
   let result;
   try {
     switch (language) {
-      case 'cpp':
+      case "cpp":
         result = compileCpp(code, input);
         break;
-      case 'java':
+      case "java":
         result = compileJava(code, input);
         break;
-      case 'c':
+      case "c":
         result = compileC(code, input);
         break;
-      case 'python':
+      case "python":
         result = compilePy(code, input);
         break;
       default:
-        return res.status(400).json({ error: 'Unsupported language' });
+        return res.status(400).json({ error: "Unsupported language" });
     }
     res.json(result);
   } catch (error) {

@@ -15,7 +15,7 @@ function compileCpp(code, input) {
     );
 
     if (compileResult.status !== 0) {
-      throw new Error("Compilation error");
+      throw new Error(`Compilation error: ${compileResult.stderr}`);
     }
 
     const filePath = "./myprogram";
@@ -30,9 +30,9 @@ function compileCpp(code, input) {
 
     fs.unlink(filePath, (err) => {
       if (err) {
-        console.error("error deleting file ", err);
+        console.error("Error deleting file:", err);
       } else {
-        console.log("file deleted!");
+        console.log("File deleted!");
       }
     });
 
@@ -51,7 +51,7 @@ function compileJava(code, input) {
     });
 
     if (compileResult.status !== 0) {
-      throw new Error("Compilation error!");
+      throw new Error(`Compilation error: ${compileResult.stderr}`);
     }
 
     const executionResult = spawnSync("java", ["Main"], {
@@ -60,10 +60,10 @@ function compileJava(code, input) {
     });
 
     if (executionResult.error) {
-      throw new Error("execution error");
+      throw new Error("Execution error");
     }
-    const directory = "./";
 
+    const directory = "./";
     const files = fs.readdirSync(directory);
 
     files.forEach((file) => {
@@ -76,22 +76,30 @@ function compileJava(code, input) {
     });
 
     return { programOutput: executionResult.stdout };
-  } catch {
+  } catch (error) {
     console.error("Error:", error);
     return { error: error.message };
   }
 }
 
 function compilePy(code, input) {
-  let command, args;
-  command = "python3";
-  args = ["-c", [code]];
-  const pyResult = spawnSync(command, args, {
-    input: input,
-    encoding: "utf-8",
-  });
+  try {
+    const command = "python3";
+    const args = ["-c", code];
+    const pyResult = spawnSync(command, args, {
+      input: input,
+      encoding: "utf-8",
+    });
 
-  return { programOutput: pyResult.stdout };
+    if (pyResult.error) {
+      throw new Error("Execution error");
+    }
+
+    return { programOutput: pyResult.stdout };
+  } catch (error) {
+    console.error("Error:", error);
+    return { error: error.message };
+  }
 }
 
 function compileC(code, input) {
@@ -106,7 +114,7 @@ function compileC(code, input) {
     );
 
     if (compileResult.status !== 0) {
-      throw new Error("Compilation error");
+      throw new Error(`Compilation error: ${compileResult.stderr}`);
     }
 
     const filePath = "./myprogram";
@@ -121,9 +129,9 @@ function compileC(code, input) {
 
     fs.unlink(filePath, (err) => {
       if (err) {
-        console.error("error deleting file ", err);
+        console.error("Error deleting file:", err);
       } else {
-        console.log("file deleted!");
+        console.log("File deleted!");
       }
     });
 

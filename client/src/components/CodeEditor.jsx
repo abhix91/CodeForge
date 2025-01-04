@@ -32,7 +32,7 @@ const CodeEditor = () => {
       });
       setOutput(response.data.programOutput || response.data.error || "No output"); // Ensure the output is correctly set
     } catch (error) {
-      console.error("Error compiling code:", error);
+      console.error( error.message);
       setOutput("Error compiling code");
     }
   };
