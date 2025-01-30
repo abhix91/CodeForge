@@ -5,8 +5,8 @@ const Input = ({ input, setInput }) => {
 
   return (
     <Box
-      w="100%"
-      h="100%"
+      w={{ base: "50%", md: "100%" }}
+      h={{ base: "auto", md: "100%" }}
       bg={theme.colors.gray[900]}
       color={theme.colors.gray[200]}
       p={4}
@@ -18,6 +18,7 @@ const Input = ({ input, setInput }) => {
         size="md"
         bg={theme.colors.gray[800]}
         color={theme.colors.gray[200]}
+        resize={{ base: "vertical", md: "none" }}
       />
     </Box>
   );
